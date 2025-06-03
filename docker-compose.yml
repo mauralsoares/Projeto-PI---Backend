@@ -8,8 +8,10 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4000
-      - MONGO_URI=mongodb://mongo:27017/auth_db
-      - JWT_SECRET=seuSegredoSuperSecreto
+      - USE_DOCKER=true
+      - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
+      - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
+      - JWT_SECRET=prefiroQueijadasDeSintra
     depends_on:
       - mongo
     networks:
@@ -28,7 +30,7 @@ services:
       - MONGO_INITDB_USERNAME=app_user
       - MONGO_INITDB_PASSWORD=app_password
     ports:
-      - "27017:27017"  # Expose MongoDB on port 27017, adicionado a 03/6 TM
+      - "27017:27017"
     networks:
       - dsa-network
     volumes:

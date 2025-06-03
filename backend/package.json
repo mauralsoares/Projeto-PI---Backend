@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "API de autenticação com Node.js e MongoDB",
   "private": true,
-  "type": "module",
   "keywords": ["Node.js", "MongoDB", "docker"],
   "author": "João Matos <joao@bklyn.co>",
   "contributors": [

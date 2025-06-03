@@ -27,6 +27,8 @@ services:
       - MONGO_INITDB_DATABASE=auth_db
       - MONGO_INITDB_USERNAME=app_user
       - MONGO_INITDB_PASSWORD=app_password
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017, adicionado a 03/6 TM
     networks:
       - dsa-network
     volumes:

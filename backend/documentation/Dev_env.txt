@@ -1,0 +1,70 @@
+Ambiente Docker para Backend Node.js + MongoDB
+
+-----------------------------------------------
+Serviços configurados:
+
+1. backend
+   - Para produção.
+   - Faz build da imagem a partir do Dockerfile do backend.
+   - Expõe a porta 4000.
+   - Usa variáveis de ambiente para ligação à base de dados e JWT.
+   - Monta o código do backend como volume (útil para debugging ou desenvolvimento avançado).
+
+2. backend-dev
+   - Para desenvolvimento (hot reload).
+   - Usa a imagem node:18-alpine.
+   - Monta o código do host como volume (./backend:/app).
+   - Instala dependências e corre "npm run dev" (precisas de nodemon no package.json).
+   - Expõe a porta 4000.
+   - Todas as alterações ao código são refletidas automaticamente, sem rebuild da imagem.
+
+3. mongo
+   - Serviço da base de dados MongoDB.
+   - Utilizador: app_user
+   - Password: app_password
+   - Base de dados: auth_db
+   - Expõe a porta 27017.
+   - Dados persistentes em volume local.
+   - Script de inicialização: mongo-init.js
+
+-----------------------------------------------
+Como usar:
+
+Desenvolvimento (hot reload):
+1. No terminal, corre:
+   docker-compose up backend-dev
+2. O backend fica disponível em http://localhost:4000
+3. Todas as alterações ao código são aplicadas automaticamente.
+
+Produção:
+1. No terminal, corre:
+   docker-compose up --build backend
+2. O backend corre a partir da imagem Docker, sem hot reload.
+
+-----------------------------------------------
+Comunicação entre frontend e backend:
+
+- Em desenvolvimento:
+  O frontend comunica com o backend em http://localhost:4000
+  (ou usa proxy no Vite para /api)
+
+- Em produção (ambos em containers):
+  O frontend comunica com o backend usando o nome do serviço Docker, por exemplo, http://backend:4000
+
+-----------------------------------------------
+Resumo das rotas HTTP:
+
+- Desenvolvimento local:
+    http://localhost:4000
+
+- Produção em Docker Compose:
+    De um container para outro: http://backend:4000
+    Do host para o backend:    http://localhost:4000
+
+-----------------------------------------------
+Vantagens desta configuração:
+
+- Não é preciso rebuildar a imagem do backend a cada alteração em desenvolvimento.
+- Ambiente consistente para toda a equipa.
+- Fácil alternância entre desenvolvimento e produção.
+- Base de dados sempre acessível para os serviços backend.

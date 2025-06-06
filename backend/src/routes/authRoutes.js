@@ -3,6 +3,9 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');// importar o middleware de autenticação
 
+// backend/src/routes/authRoutes.js
+console.log('authRoutes carregado');
+
 // Rota de registro
 router.post('/register', authController.register);
 

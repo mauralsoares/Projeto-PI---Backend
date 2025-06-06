@@ -10,7 +10,10 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // ou '*', para testes
+  credentials: true
+}));
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -55,7 +58,7 @@ app.listen(PORT, () => {
 // http://localhost:4000/api/users
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find({}, '-password'); // exclui o campo password
+    const users = await User.find({}); // exclui o campo password
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -41,6 +41,7 @@ exports.register = async (req, res) => {
 
 // Login do usuário
 exports.login = async (req, res) => {
+   console.log('LOGIN BODY:', req.body); // <-- Adiciona isto
   try {
     const { email, password } = req.body;
     

@@ -20,27 +20,28 @@ services:
       - ./backend:/app
       - /app/node_modules
 
-    backend-dev:
-      image: node:18-alpine
-      container_name: backend_dev
-      working_dir: /app
-      command: sh -c "npm install && npm run dev"
-      ports:
-        - "4000:4000"
-      environment:
-        - NODE_ENV=development
-        - PORT=4000
-        - USE_DOCKER=true
-        - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
-        - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
-        - JWT_SECRET=prefiroQueijadasDeSintra
-      depends_on:
-        - mongo
-      networks:
-        - dsa-network
-      volumes:
-        - ./backend:/app
-        - /app/node_modules
+  backend-dev:
+    image: node:18-alpine
+    container_name: backend_dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - USE_DOCKER=true
+      - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
+      - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
+      - JWT_SECRET=prefiroQueijadasDeSintra
+    depends_on:
+      - mongo
+    networks:
+      - dsa-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
   mongo:
     image: mongo:latest
     container_name: mongo_db

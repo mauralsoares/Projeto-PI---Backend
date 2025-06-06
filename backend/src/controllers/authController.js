@@ -1,3 +1,4 @@
+// backend\src\controllers\authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -7,52 +8,63 @@ const bcrypt = require('bcryptjs');
 // Registrar novo user e devolver token JWT para autenticação automática
 exports.register = async (req, res) => {
   try {
-    // Extrair dados do corpo do pedido
     const { name, email, password, tipo } = req.body;
-    
-    // Verificar se já existe utilizador com este email
+
+    // Verificar duplicação de e-mail
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ error: 'Email já está em uso' });
+      return res.status(400).json({ error: 'E-mail já está em uso.' });
     }
 
-    // Criar novo utilizador
+    // Criar utilizador (presume-se que a encriptação da palavra-passe ocorre no modelo)
     const user = await User.create({ name, email, password, tipo });
-    
-    // Remover a password do objeto de retorno
+
+    // Ocultar palavra-passe no retorno (boas práticas)
     user.password = undefined;
 
-    // Gerar token JWT para autenticação automática
-    const token = jwt.sign(
-      { id: user._id, tipo: user.tipo }, // payload do token
-      process.env.JWT_SECRET,            // chave secreta
-      { expiresIn: '24h' }                // validade do token
-    );
+    // Gerar token JWT
+  const token = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+      tipo: user.tipo,
+      name: user.name,
+      curso: user.curso,
+      uc: user.uc
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
 
-    // Responder com o utilizador criado e o token JWT
-    res.status(201).json({ user, token });
+
+    return res.status(201).json({ user, token });
   } catch (error) {
-    // Em caso de erro, responder com mensagem de erro
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
 
 
-// Login do usuário
+
+// Login do utilizador e devolução de token JWT
 exports.login = async (req, res) => {
-   console.log('LOGIN BODY:', req.body); // <-- Adiciona isto
+  console.log('LOGIN BODY:', req.body);
+
   try {
     const { email, password } = req.body;
-    
+
     const user = await User.findOne({ email }).select('+password');
+    console.log('UTILIZADOR ENCONTRADO:', user);
+
     if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('PALAVRA-PASSE CORRESPONDE:', isMatch);
+
     if (!isMatch) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
     const token = jwt.sign(
@@ -61,21 +73,35 @@ exports.login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.json({ token, user: { id: user._id, name: user.name, email: user.email, tipo: user.tipo } });
+    return res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        tipo: user.tipo
+      }
+    });
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ error: error.message });
   }
 };
+
 
 // Obter perfil do utilizador autenticado
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
+    
     if (!user) {
-      return res.status(404).json({ error: 'Utilizador não encontrado' });
+      return res.status(404).json({ error: 'Utilizador não encontrado.' });
     }
-    res.json(user);
+
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ error: error.message });
   }
 };

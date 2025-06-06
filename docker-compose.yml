@@ -5,59 +5,30 @@ services:
     restart: unless-stopped
     ports:
       - "4000:4000"
-    environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - USE_DOCKER=true
-      - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
-      - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
-      - JWT_SECRET=prefiroQueijadasDeSintra
-    depends_on:
-      - mongo
-    networks:
-      - dsa-network      
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-
-  backend-dev:
-    image: node:18-alpine
-    container_name: backend_dev
-    working_dir: /app
-    command: sh -c "npm install && npm run dev"
-    ports:
-      - "4000:4000"
-    environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - USE_DOCKER=true
-      - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
-      - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
-      - JWT_SECRET=prefiroQueijadasDeSintra
-    depends_on:
-      - mongo
+    env_file:
+      - .env
     networks:
       - dsa-network
     volumes:
       - ./backend:/app
       - /app/node_modules
 
-  mongo:
-    image: mongo:latest
-    container_name: mongo_db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=senhaadmin
-      - MONGO_INITDB_DATABASE=auth_db
-      - MONGO_INITDB_USERNAME=app_user
-      - MONGO_INITDB_PASSWORD=app_password
-    ports:
-      - "27017:27017"
-    networks:
-      - dsa-network
-    volumes:
-      - mongodb_data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo_db
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=admin
+  #     - MONGO_INITDB_ROOT_PASSWORD=senhaadmin
+  #     - MONGO_INITDB_DATABASE=auth_db
+  #     - MONGO_INITDB_USERNAME=app_user
+  #     - MONGO_INITDB_PASSWORD=app_password
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - dsa-network
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 networks:
   dsa-network:
@@ -65,3 +36,26 @@ networks:
 
 volumes:
   mongodb_data:
+
+
+# services:
+#   backend:
+#     build: ./backend
+#     container_name: backend_app
+#     restart: unless-stopped
+#     ports:
+#       - "4000:4000"
+#     environment:
+#       - NODE_ENV=development
+#       - PORT=4000
+#       - USE_DOCKER=false # Set to true if running in Docker
+#       - MONGODB_URI_DOCKER=mongodb://app_user:app_password@mongo:27017/auth_db
+#       - MONGODB_URI_LOCAL=mongodb://app_user:app_password@localhost:27017/auth_db
+#       - JWT_SECRET=prefiroQueijadasDeSintra
+#     # depends_on:
+#     #   - mongo
+#     networks:
+#       - dsa-network      
+#     volumes:
+#       - ./backend:/app
+#       - /app/node_modules

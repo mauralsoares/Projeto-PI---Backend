@@ -22,6 +22,12 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user'
   },
+  rates: [
+  {
+    fileId: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' },
+    nota: { type: Number, min: 0, max: 5 }
+  }
+],
   createdAt: {
     type: Date,
     default: Date.now

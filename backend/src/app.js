@@ -60,8 +60,6 @@ const startServer = async () => {
       res.json({ mensagem: 'Ligação entre containers está funcional!' });
     });
 
-
-
     // 🚀 Inicia o servidor
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {

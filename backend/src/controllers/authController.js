@@ -60,6 +60,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
+    console.log('PALAVRA-PASSE GUARDADA:', user.password);
     const isMatch = await bcrypt.compare(password, user.password);
     console.log('PALAVRA-PASSE CORRESPONDE:', isMatch);
 
@@ -83,10 +84,13 @@ exports.login = async (req, res) => {
       }
     });
 
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error.message });
-  }
+} catch (error) {
+  console.error('Erro inesperado durante o login:', error);
+  res.status(500).json({
+    error: 'Erro interno no servidor. Tente novamente mais tarde.'
+  });
+}
+
 };
 
 

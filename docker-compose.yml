@@ -13,27 +13,10 @@ services:
       - ./backend:/app
       - /app/node_modules
 
-  # mongo:
-  #   image: mongo:latest
-  #   container_name: mongo_db
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=admin
-  #     - MONGO_INITDB_ROOT_PASSWORD=senhaadmin
-  #     - MONGO_INITDB_DATABASE=auth_db
-  #     - MONGO_INITDB_USERNAME=app_user
-  #     - MONGO_INITDB_PASSWORD=app_password
-  #   ports:
-  #     - "27017:27017"
-  #   networks:
-  #     - dsa-network
-  #   volumes:
-  #     - mongodb_data:/data/db
-  #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 networks:
   dsa-network:
-    driver: bridge
-
+    external: true
 volumes:
   mongodb_data:
 
@@ -59,3 +42,29 @@ volumes:
 #     volumes:
 #       - ./backend:/app
 #       - /app/node_modules
+
+
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo_db
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=admin
+  #     - MONGO_INITDB_ROOT_PASSWORD=senhaadmin
+  #     - MONGO_INITDB_DATABASE=auth_db
+  #     - MONGO_INITDB_USERNAME=app_user
+  #     - MONGO_INITDB_PASSWORD=app_password
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - dsa-network
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+
+#   networks:
+#   dsa-network:
+#     driver: bridge
+
+# volumes:
+#   mongodb_data:

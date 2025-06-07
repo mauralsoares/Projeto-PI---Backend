@@ -18,6 +18,8 @@ app.use(cors({
 app.use(express.json());
 app.use(morgan('dev'));
 
+
+
 // 🧠 Arranque com ligação à BD e GridFS
 const startServer = async () => {
   try {
@@ -54,6 +56,10 @@ const startServer = async () => {
     const fileRoutes = require('./routes/fileRoutes');
     app.use('/api/uploads', fileRoutes);
 
+    // logo após app.use('/api/uploads', fileRoutes);
+    app.get('/api/test', (req, res) => {
+      res.json({ mensagem: 'Ligação entre containers está funcional!' });
+    });
 
 
 

@@ -17,6 +17,7 @@ const storage = new GridFsStorage({
       curso: req.user.curso,
       uc: req.user.uc,
       tipo: req.user.tipo,
+      rating: 0, // Inicia com 0 pode ser alterado depois
       uploadedAt: new Date()
     }
   })
@@ -35,7 +36,7 @@ router.post('/', autenticar(), upload.single('ficheiro'), (req, res) => {
 });
 
 /** 📥 Download
- * GET /api/uploads/:id |      | teste: http://localhost:4000/api/uploads/684356dd830e86f9faaf9e60
+ * GET /api/uploads/:id |  | teste: http://localhost:4000/api/uploads/684356dd830e86f9faaf9e60
  */
 router.get('/:id', async (req, res) => {
   try {

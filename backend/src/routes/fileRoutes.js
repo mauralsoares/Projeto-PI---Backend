@@ -5,8 +5,9 @@ const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const mongoose = require('mongoose');
 const autenticar = require('../middleware/authMiddleware');
+const fileMeta = require('../models/fileMeta.js');
 
-// 🧠 Configurar GridFS para upload
+// 🧠 Configurar GridFS para upload (‼️METADADOS IMUTÁVEIS)
 const storage = new GridFsStorage({
   url: process.env.MONGODB_URI_LOCAL,
   file: (req, file) => ({
@@ -14,10 +15,7 @@ const storage = new GridFsStorage({
     bucketName: 'uploads',
     metadata: {
       ownerEmail: req.user.email,
-      curso: req.user.curso,
-      uc: req.user.uc,
-      tipo: req.user.tipo,
-      rating: 0, // Inicia com 0 pode ser alterado depois
+      contentType: file.mimetype,
       uploadedAt: new Date()
     }
   })
@@ -28,11 +26,28 @@ const upload = multer({ storage });
 /** 📤 Upload
  * POST /api/uploads
  */
-router.post('/', autenticar(), upload.single('ficheiro'), (req, res) => {
-  res.json({
-    mensagem: 'Ficheiro carregado com sucesso!',
-    ficheiro: req.file
-  });
+router.post('/', autenticar(), upload.single('ficheiro'), async (req, res) => {
+  try {
+    //📖 Cria o documento fileMeta com dados do file editáveis
+    await fileMeta.create({
+      fileId: req.file.id,
+      ownerEmail: req.user.email,
+      ownerName: req.user.name,
+      titulo: req.body.titulo || req.file.originalname,
+      curso: req.body.curso, // Tem de vir igual ao da lista cursosComTipo
+      uc: req.body.uc,
+      tipo: req.body.tipo,   // Tem de vir igual ao da lista fileTypes
+      rating: 0,
+      ratingCount: 0,
+      uploadedAt: new Date()
+    });
+    res.json({
+      mensagem: 'Ficheiro carregado com sucesso!',
+      ficheiro: req.file
+    });
+  } catch (err) {
+    res.status(400).json({ erro: 'Dados inválidos ou curso/tipo não permitido', detalhe: err.message });
+  }
 });
 
 /** 📥 Download

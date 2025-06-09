@@ -21,7 +21,7 @@ const connectDB = async () => {
 
   try {
     // dInfo tipo de ligação escolhida
-    console.log(`🟡 A ligar ao MongoDB (${process.env.USE_DOCKER === 'true' ? 'Docker' : 'Cloud'})`);
+    console.log(` A ligar ao MongoDB (${process.env.USE_DOCKER === 'true' ? 'Docker' : 'Cloud'})`);
 
     // 🔐 Liga ao MongoDB com opções seguras e compatíveis
     const connection = await mongoose.connect(mongoUri, {

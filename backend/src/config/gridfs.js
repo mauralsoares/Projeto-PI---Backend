@@ -14,7 +14,7 @@ let gfs;
  * O GridFS permite armazenar ficheiros de grandes dimensões (ex.: PDF, imagens, áudio) directamente na base de dados,
  * distribuindo-os em blocos (chunks).
  * 
- * @param {mongoose.Connection} conn - Ligação activa ao MongoDB, proveniente de mongoose.connection
+ * @param {mongoose.Connection} conn - Ligação activa ao MongoDB, proveniente do mongoose.connection
  */
 const connectGridFS = (db) => {
     // Verifica se já existe uma instância do GridFS

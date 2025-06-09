@@ -19,5 +19,5 @@ module.exports = [
   // Outros
   "epub", "mobi", "psd", "ai", "indd", "apk", "exe", "bat", "dll",
   // Valor para tipos desconhecidos
-  "outro"
+  ""
 ];

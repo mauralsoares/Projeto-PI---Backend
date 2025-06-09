@@ -6,6 +6,8 @@ const connectDB = require('../src/config/db');
 const { connectGridFS } = require('../src/config/gridfs');
 const authRoutes = require('../src/routes/authRoutes');
 const User = require('../src/models/User');
+const listRoutes = require('./routes/listRoutes');
+
 
 const app = express();
 
@@ -28,13 +30,22 @@ const startServer = async () => {
     // 🌐 Rotas principais
     app.get('/', (req, res) => {
       res.json({
-        mensagem: 'Bem-vindo à API de autenticação',
+        mensagem: 'Bem-vindo à API do Projeto PI',
         endpoints: {
           registo: 'POST /api/auth/register',
-          login: 'POST /api/auth/login'
+          login: 'POST /api/auth/login',
+          utilizadores: 'GET /api/users',
+          upload: 'POST /api/uploads',
+          download: 'GET /api/uploads/:id',
+          visualizarFicheiro: 'GET /api/uploads/view/:id',
+          pesquisarFicheiros: 'GET /api/files?curso=...&uc=...&tipo=...&descricao=...&page=1&limit=8'
         }
       });
     });
+
+    // 📋 Rotas para listas (UCs, cursos, filetypes) 
+    app.use('/api/lists', listRoutes);
+
 
     // Ignorar pedidos ao favicon (evita erro 404 no browser)
     app.get('/favicon.ico', (req, res) => res.status(204).end());
@@ -51,13 +62,18 @@ const startServer = async () => {
       }
     });
 
-    // 📁 Rotas de upload e downlaod de ficheiros (GridFS)
+    //📤📩 Rotas de upload e downlaod  de ficheiros (GridFS)
     const fileRoutes = require('./routes/fileRoutes');
     app.use('/api/uploads', fileRoutes);
 
-    // logo após app.use('/api/uploads', fileRoutes);
+    // 📄 Rotas de pesquisa/listagem de ficheiros
+    const fileSearchRoutes = require('./routes/fileSearchRoutes');
+    app.use('/api/files', fileSearchRoutes);
+
+    // --DEBUG--
+    // 👌Rota de teste para verificar ligação entre containers;
     app.get('/api/test', (req, res) => {
-      res.json({ mensagem: 'Ligação entre containers está funcional!' });
+      res.json({ mensagem: 'Ligação entre containers está a bombar!💣' });
     });
 
     // 🚀 Inicia o servidor

@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
     // Criar utilizador (presume-se que a encriptação da palavra-passe ocorre no modelo)
     const user = await User.create({ name, email, password, tipo });
 
-    // Ocultar palavra-passe no retorno (boas práticas)
+    // 🦺 Ocultar palavra-passe no retorno ao front  
     user.password = undefined;
 
     // Gerar token JWT
@@ -29,11 +29,10 @@ exports.register = async (req, res) => {
       email: user.email,
       tipo: user.tipo,
       name: user.name,
-      curso: user.curso,
-      uc: user.uc
+
     },
     process.env.JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: '6h' }
   );
 
 
@@ -57,21 +56,26 @@ exports.login = async (req, res) => {
     console.log('UTILIZADOR ENCONTRADO:', user);
 
     if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas.' });
+      return res.status(401).json({ error: "Credenciais inválidas." });
     }
 
-    console.log('PALAVRA-PASSE GUARDADA:', user.password);
+    //console.log("PALAVRA-PASSE GUARDADA:", user.password);
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log('PALAVRA-PASSE CORRESPONDE:', isMatch);
+    console.log("PALAVRA-PASSE CORRESPONDE:", isMatch);
 
     if (!isMatch) {
-      return res.status(401).json({ error: 'Credenciais inválidas.' });
+      return res.status(401).json({ error: "Credenciais inválidas." });
     }
 
     const token = jwt.sign(
-      { id: user._id, tipo: user.tipo },
+      {
+        id: user._id,
+        email: user.email,
+        tipo: user.tipo,
+        name: user.name,
+      },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: "6h" }
     );
 
     return res.json({
@@ -108,4 +112,17 @@ exports.getProfile = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: error.message });
   }
+};
+
+
+
+// Exemplo de logout (para JWT normalmente é só no frontend, mas podes invalidar tokens em blacklist se quiseres)
+exports.logout = (req, res) => {
+  // Apenas resposta de sucesso, pois JWT não tem "logout" real no backend
+  res.json({ mensagem: 'Logout efetuado com sucesso.' });
+};
+
+// Exemplo de change password
+exports.changePassword = async (req, res) => {
+  // Implementa aqui a lógica para mudar a password do utilizador autenticado
 };

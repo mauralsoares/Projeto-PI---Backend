@@ -34,6 +34,7 @@ router.post('/', autenticar(), upload.single('ficheiro'), async (req, res) => {
       ownerEmail: req.user.email,
       ownerName: req.user.name,
       titulo: req.body.titulo || req.file.originalname,
+      descricao: req.body.descricao || '',
       curso: req.body.curso, // Tem de vir igual ao da lista cursosComTipo
       uc: req.body.uc,
       tipo: req.body.tipo,   // Tem de vir igual ao da lista fileTypes
@@ -80,15 +81,14 @@ router.get('/:id', async (req, res) => {
 
 // 📄 Visualizar ficheiro inline (imagem, PDF, etc.)
 router.get('/view/:id', async (req, res) => {
-  const gfs = getGFS();
-  if (!gfs) return res.status(500).json({ erro: 'GridFS não iniciado' });
-
   try {
     const fileId = new mongoose.Types.ObjectId(req.params.id);
-    const file = await gfs.files.findOne({ _id: fileId });
+
+    const filesCollection = mongoose.connection.db.collection('uploads.files');
+    const file = await filesCollection.findOne({ _id: fileId });
     if (!file) return res.status(404).json({ erro: 'Ficheiro não encontrado' });
 
-    // ⚠️ Browser tentará abrir, em vez de descarregar
+    // 📖 Browser tentará abrir inline (PDF, imagem, etc.)
     res.set('Content-Type', file.contentType);
 
     const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {

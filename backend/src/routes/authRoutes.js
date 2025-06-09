@@ -13,8 +13,15 @@ router.post('/register', authController.register);
 // Rota de login
 router.post('/login', authController.login);
 
-// Rota protegida para ver o perfil (EXEMPLO)
+// Rota protegida para ver o perfil 
 router.get('/me', authMiddleware, authController.getProfile);
+
+// Rota de logout 
+router.post('/logout', authMiddleware, authController.logout);
+
+// Rota para mudar password
+router.post('/change-password', authMiddleware, authController.changePassword);
+
 
 
 

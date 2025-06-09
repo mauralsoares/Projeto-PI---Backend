@@ -26,7 +26,8 @@ const licenciaturas = [
   "Tecnologias Digitais e Gestão",
   "Tecnologias Digitais e Inteligência Artificial",
   "Tecnologias Digitais e Saúde",
-  "Tecnologias Digitais e Segurança de Informação"
+  "Tecnologias Digitais e Segurança de Informação",
+  "outro"
 ];
 
 const mestrados = [

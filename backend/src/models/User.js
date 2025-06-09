@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
   },
   tipo: {
     type: String,
-    enum: ['admin', 'user'],
+    enum: ['adminlson', 'user'],
     default: 'user'
   },
   rates: [

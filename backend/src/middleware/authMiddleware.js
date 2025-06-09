@@ -3,10 +3,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 
-/**
+/*
  * Middleware de autenticação JWT.
- * Verifica a validade do token e injeta o utilizador decodificado no `req`.
- * Permite controlo opcional de permissões por tipo de utilizador (ex: 'admin', 'estudante').
+ * Verifica a validade do token e passa o utilizador descodificado no `req`.
+ * Permite controlo op de permissões por tipo de utilizador (ex: 'adminlson', 'user').
  *
  * @param {Array} tiposPermitidos - Lista de tipos de utilizador autorizados a aceder à rota.
  */

@@ -15,7 +15,7 @@ router.post('/login', authController.login);
 router.get('/me', authMiddleware, authController.getProfile);
 
 // Rota de logout 
-router.post('/logout', authMiddleware, authController.logout);
+router.post('/logout', authMiddleware(), authController.logout);
 
 // Rota para mudar password
 router.post('/change-password', authMiddleware, authController.changePassword);

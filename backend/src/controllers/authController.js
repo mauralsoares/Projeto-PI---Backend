@@ -116,7 +116,7 @@ exports.getProfile = async (req, res) => {
 
 
 
-// Exemplo de logout (para JWT normalmente é só no frontend, mas podes invalidar tokens em blacklist se quiseres)
+// logout (para JWT  é só no frontend, aqui invalida tokens em blacklist)
 exports.logout = (req, res) => {
   // Apenas resposta de sucesso, pois JWT não tem "logout" real no backend
   res.json({ mensagem: 'Logout efetuado com sucesso.' });

@@ -114,7 +114,25 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// Atualizar perfil do utilizador autenticado ( apenas "name" por agora)
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ error: 'Nome em falta.' });
 
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { name },
+      { new: true, select: '-password' }
+    );
+    if (!user) return res.status(404).json({ error: 'Utilizador não encontrado.' });
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // logout (para JWT  é só no frontend, aqui invalida tokens em blacklist)
 exports.logout = (req, res) => {

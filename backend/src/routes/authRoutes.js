@@ -14,6 +14,9 @@ router.post('/login', authController.login);
 // Rota protegida para ver o perfil 
 router.get('/me', authMiddleware, authController.getProfile);
 
+// Editar o próprio perfil ( nome)
+router.patch('/me', authMiddleware, authController.updateProfile);
+
 // Rota de logout 
 router.post('/logout', authMiddleware(), authController.logout);
 

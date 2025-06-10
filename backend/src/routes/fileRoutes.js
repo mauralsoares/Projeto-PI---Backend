@@ -52,7 +52,7 @@ router.post('/', autenticar(), upload.single('ficheiro'), async (req, res) => {
 });
 
 /** 📥 Download
- * GET /api/uploads/:id |  | teste: http://localhost:4000/api/uploads/684356dd830e86f9faaf9e60
+ * GET /api/uploads/:id 
  */
 router.get('/:id', async (req, res) => {
   try {
@@ -103,5 +103,42 @@ router.get('/view/:id', async (req, res) => {
   }
 });
 
+
+// Apagar vários ficheiros (owner ou admin)
+// DELETE /api/uploads  --> array de IDs no body
+router.delete('/delete', autenticar(), async (req, res) => {
+  try {
+    const { ids } = req.body; // array de IDs
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ erro: 'IDs em falta' });
+    }
+
+    let apagados = 0, falhados = 0, erros = [];
+
+    for (const id of ids) {
+      try {
+        const fileId = new mongoose.Types.ObjectId(id);
+        const meta = await fileMeta.findOne({ fileId });
+        if (!meta) { falhados++; erros.push({ id, erro: 'Meta não encontrado' }); continue; }
+
+        // Só owner ou admin pode apagar
+        if (meta.ownerEmail !== req.user.email && req.user.tipo !== 'admin') {
+          falhados++; erros.push({ id, erro: 'Não autorizado' }); continue;
+        }
+
+        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: 'uploads' });
+        await bucket.delete(fileId); // Apaga documento  do chunks e do files
+        await fileMeta.deleteOne({ fileId });//Apaga o documento fileMeta
+        apagados++;
+      } catch (err) {
+        falhados++; erros.push({ id, erro: err.message });
+      }
+    }
+
+    res.json({ mensagem: `Apagados: ${apagados}, Falhados: ${falhados}`, erros });
+  } catch (err) {
+    res.status(500).json({ erro: '❌Erro ao apagar ficheiros', detalhe: err.message });
+  }
+});
 
 module.exports = router;

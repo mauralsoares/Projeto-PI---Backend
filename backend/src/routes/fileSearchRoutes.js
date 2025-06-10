@@ -85,6 +85,7 @@ function formatFile(f) {
     ano: f.ano,
     uploadedAt: f.uploadedAt,
     descricao: f.descricao,
+    previewUrl: `/api/uploads/view/${f.fileId}` // URL para visualização inline
   };
 }
 

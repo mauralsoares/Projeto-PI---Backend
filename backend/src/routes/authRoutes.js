@@ -12,15 +12,15 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // Rota protegida para ver o perfil 
-router.get('/me', authMiddleware, authController.getProfile);
+router.get('/me', authMiddleware(), authController.getProfile);
 
-// Editar o próprio perfil ( nome)
-router.patch('/me', authMiddleware, authController.updateProfile);
+// Editar o próprio perfil (nome apenas)
+router.patch('/me', authMiddleware(), authController.updateProfile);
 
-// Rota de logout 
+// Rota de logout (nao faz grande coisa mas pode ser implementada umablacklist ou algo assim)
 router.post('/logout', authMiddleware(), authController.logout);
 
-// Rota para mudar password
+// Rota para mudar password (não implementado)
 router.post('/change-password', authMiddleware, authController.changePassword);
 
 

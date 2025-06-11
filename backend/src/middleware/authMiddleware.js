@@ -6,7 +6,7 @@ const User = require('../models/User');
 /*
  * Middleware de autenticação JWT.
  * Verifica a validade do token e passa o utilizador descodificado no `req`.
- * Permite controlo op de permissões por tipo de utilizador (ex: 'adminlson', 'user').
+ * Permite controlo de permissões por tipo de utilizador (ex: 'admilson', 'user').
  *
  * @param {Array} tiposPermitidos - Lista de tipos de utilizador autorizados a aceder à rota.
  */
@@ -27,20 +27,35 @@ module.exports = function autenticar(...tiposPermitidos) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-       // ⚠️ Vai buscar o utilizador completo à base de dados
-      const user = await User.findById(decoded.id).select('-password'); // exclui a password por segurança
-
+      // Vai buscar o utilizador completo à base de dados
+      const user = await User.findById(decoded.id).select('-password');
       if (!user) {
         return res.status(404).json({ error: 'Utilizador não encontrado' });
       }
 
-      // Verifica se o tipo de utilizador está autorizado (caso tenha sido especificado)
+      // Regra especial: só este user é admin
+      const isSuperAdmin =
+        user.email === 'admin@iscte-iul.pt' && user.tipo === 'adminlson';
+
+      // Se a rota requer admin, só deixa passar o super adminlson
       if (
         tiposPermitidos.length > 0 &&
-        !tiposPermitidos.includes(decoded.tipo)
+        tiposPermitidos.includes('admin') &&
+        !isSuperAdmin
       ) {
         return res.status(403).json({
-          error: `Acesso proibido para o tipo de utilizador: '${decoded.tipo}'`
+          error: `Acesso restrito ao administrador principal.`
+        });
+      }
+
+      // Para outros tipos, verifica normalmente
+      if (
+        tiposPermitidos.length > 0 &&
+        !tiposPermitidos.includes(user.tipo) &&
+        !isSuperAdmin // já passou acima se for admin
+      ) {
+        return res.status(403).json({
+          error: `Acesso proibido para o tipo de utilizador: '${user.tipo}'`
         });
       }
 
@@ -52,18 +67,3 @@ module.exports = function autenticar(...tiposPermitidos) {
     }
   };
 };
-
-
-// Exemplod e usos
-
-// PERMITIR QUALQUER AUTH USER:
-// const autenticar = require('../middlewares/authMiddleware');
-// app.get('/api/profile', autenticar(), controllerDoPerfil);
-
-// PERMITIR APENAS ADMIN:
-// const autenticar = require('../middlewares/authMiddleware');
-// app.delete('/api/admin/users/:id', autenticar('admin'), eliminarUtilizador);
-
-//PERMITIR APENAS ESTUDANTES E DOCENTES:
-// const autenticar = require('../middlewares/authMiddleware');
-// app.get('/api/aulas', autenticar('estudante', 'docente'), listarAulas);

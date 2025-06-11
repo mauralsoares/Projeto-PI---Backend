@@ -142,5 +142,6 @@ exports.logout = (req, res) => {
 
 // Exemplo de change password
 exports.changePassword = async (req, res) => {
-  // Implementa aqui a lógica para mudar a password do utilizador autenticado
+  // aqui a lógica para mudar a password do utilizador autenticado
+  // ainda não implementada
 };

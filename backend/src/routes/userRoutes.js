@@ -10,7 +10,13 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 // Listar todos os utilizadores
 // GET /api/users
-router.get('/', authMiddleware("admin"), userController.listUsers);
+router.get('/', authMiddleware("admin"), userController.listUsers);//(apenas para admin)
+
+// Listar todos os utilizadores (sem paginação)
+router.get('/all', authMiddleware("admin"), userController.listAllUsers);//(apenas para admin)
+
+// Procurar utilizador por email
+router.get('/email/:email', authMiddleware("admin"), userController.getUserByEmail);//(apenas para admin)
 
 // Ver perfil de um utilizador específico
 // GET /api/users/:id
@@ -24,10 +30,5 @@ router.patch('/:id', authMiddleware("admin"), userController.updateUser);
 // DELETE /api/users/:id
 router.delete('/:id', authMiddleware("admin"), userController.deleteUser);
 
-// Listar todos os utilizadores (sem paginação)
-router.get('/all', authMiddleware("admin"), userController.listAllUsers);
-
-// Procurar utilizador por email
-router.get('/email/:email', authMiddleware("admin"), userController.getUserByEmail);
 
 module.exports = router;

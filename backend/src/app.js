@@ -8,6 +8,7 @@ const authRoutes = require('../src/routes/authRoutes');
 const User = require('../src/models/User');
 const listRoutes = require('./routes/listRoutes');
 const studySpotRoutes = require('./routes/studySpotRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 
 const app = express();
@@ -63,14 +64,8 @@ const startServer = async () => {
     // 🔐 Rotas de autenticação
     app.use('/api/auth', authRoutes);
 
-    app.get('/api/users', async (req, res) => {
-      try {
-        const users = await User.find({}, '-password');
-        res.json(users);
-      } catch (err) {
-        res.status(500).json({ erro: err.message });
-      }
-    });
+    // Rotas de utilizadores(admin)
+    app.use('/api/users', userRoutes);
 
     //📤📩 Rotas de upload e downlaod  de ficheiros (GridFS)
     const fileRoutes = require('./routes/fileRoutes');

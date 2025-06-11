@@ -74,11 +74,21 @@ exports.getUserById = async (req, res) => {
  */
 exports.updateUser = async (req, res) => {
   try {
+    const { id } = req.params;
     const { name, tipo } = req.body;
+
+    // Só o próprio utilizador OU o super admin pode editar
+    const isSuperAdmin =
+      req.user.email === 'admin@iscte-iul.pt' && req.user.tipo === 'adminlson';
+
+    if (req.user.id !== id && !isSuperAdmin) {
+      return res.status(403).json({ error: 'Só o próprio utilizador ou o super admin pode editar este perfil.' });
+    }
+
     const update = {};
     if (name) update.name = name;
     if (tipo) {
-      const tiposPermitidos = ['adminlson', 'user'];
+      const tiposPermitidos = ['adminlson', 'admin', 'user'];
       if (!tiposPermitidos.includes(tipo)) {
         return res.status(400).json({ error: 'Tipo de utilizador inválido.' });
       }
@@ -90,11 +100,15 @@ exports.updateUser = async (req, res) => {
     }
 
     const user = await User.findByIdAndUpdate(
-      req.params.id,
+      id,
       update,
       { new: true, select: '-password' }
     );
-    if (!user) return res.status(404).json({ error: 'Utilizador não encontrado.' });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Utilizador não encontrado.' });
+    }
+
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao atualizar utilizador: ' + err.message });

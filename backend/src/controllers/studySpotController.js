@@ -5,7 +5,7 @@ const StudySpot = require('../models/studyspot');
 // Criar local de estudo (com verificação de proximidade)
 exports.create = async (req, res) => {
   try {
-    const { nome, descricao, longitude, latitude, forcar } = req.body;
+    const { nome, descricao, longitude, latitude, cidade, morada, codigoPostal, forcar } = req.body;
     const threshold = 30; // metros
 
     // 1. Verificar se já existe local próximo
@@ -33,6 +33,9 @@ exports.create = async (req, res) => {
       nome,
       descricao,
       localizacao: { type: 'Point', coordinates: [longitude, latitude] },
+      cidade,
+      morada,
+      codigoPostal,
       criadoPor: req.user.id
     });
     res.status(201).json(spot);

@@ -80,6 +80,10 @@ const startServer = async () => {
     const fileSearchRoutes = require('./routes/fileSearchRoutes');
     app.use('/api/files', fileSearchRoutes);
 
+    // ⭐ Rotas de classificação de ficheiros
+    const fileRateRoute = require('./routes/fileRateRoute');
+    app.use('/api/uploads', fileRateRoute);
+
     // 📍 Rotas para spots de estudo
     app.use('/api/studyspots', studySpotRoutes);
 

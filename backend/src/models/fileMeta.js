@@ -11,7 +11,7 @@ const FileMetaSchema = new mongoose.Schema({
     required: true,
     unique: true,
   }, // ID do ficheiro em GridFS
-  ownerEmail: { type: String, required: true, lowercase: true,trim: true, match: [/.+@.+\..+/, 'Email inválido']}, // Email do dono
+  ownerEmail: { type: String, required: true, lowercase: true,trim: true, match: [/.+@.+\..+/, 'Email inválido']}, // Email do dono: + uma verificação pq sim, de+ ñ custa
   curso: { type: String, required: true, trim: true, default: "", enum: cursos.cursosComTipo },
   uc:{type: String, required: true, trim: true, default: "", enum: ucs.ucsUnicas}, 
   titulo:{type: String, required: true, trim: true, default: ""},

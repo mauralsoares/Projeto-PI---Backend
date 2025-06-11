@@ -7,6 +7,7 @@ const { connectGridFS } = require('../src/config/gridfs');
 const authRoutes = require('../src/routes/authRoutes');
 const User = require('../src/models/User');
 const listRoutes = require('./routes/listRoutes');
+const studySpotRoutes = require('./routes/studySpotRoutes');
 
 
 const app = express();
@@ -56,7 +57,6 @@ const startServer = async () => {
     // 📋 Rotas para listas (UCs, cursos, filetypes) 
     app.use('/api/lists', listRoutes);
 
-
     // Ignorar pedidos ao favicon (evita erro 404 no browser)
     app.get('/favicon.ico', (req, res) => res.status(204).end());
 
@@ -76,9 +76,12 @@ const startServer = async () => {
     const fileRoutes = require('./routes/fileRoutes');
     app.use('/api/uploads', fileRoutes);
 
-    // 📄 Rotas de pesquisa/listagem de ficheiros
+    // 📄🔎 Rotas de pesquisa/listagem de ficheiros
     const fileSearchRoutes = require('./routes/fileSearchRoutes');
     app.use('/api/files', fileSearchRoutes);
+
+    // 📍 Rotas para spots de estudo
+    app.use('/api/studyspots', studySpotRoutes);
 
     // --DEBUG--
     // 👌Rota de teste para verificar ligação entre containers;

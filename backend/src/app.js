@@ -56,7 +56,6 @@ const startServer = async () => {
     // 📋 Rotas para listas (UCs, cursos, filetypes) 
     app.use('/api/lists', listRoutes);
 
-
     // Ignorar pedidos ao favicon (evita erro 404 no browser)
     app.get('/favicon.ico', (req, res) => res.status(204).end());
 
@@ -79,6 +78,10 @@ const startServer = async () => {
     // 📄 Rotas de pesquisa/listagem de ficheiros
     const fileSearchRoutes = require('./routes/fileSearchRoutes');
     app.use('/api/files', fileSearchRoutes);
+
+    // ⭐ Rotas de classificação de ficheiros
+    const fileRateRoute = require('./routes/fileRateRoute');
+    app.use('/api/uploads', fileRateRoute);
 
     // --DEBUG--
     // 👌Rota de teste para verificar ligação entre containers;

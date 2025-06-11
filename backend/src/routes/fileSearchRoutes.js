@@ -72,13 +72,18 @@ function buildSort(sortBy) {
 }
 
 // Função para formatar cada ficheiro
-function formatFile(f) {
+async function formatFile(f) {
+  // Vai buscar o ficheiro real ao GridFS para obter o contentType
+  const filesCollection = mongoose.connection.db.collection('uploads.files');
+  const file = await filesCollection.findOne({ _id: f.fileId });
   return {
     id: f.fileId,
     titulo: f.titulo,
     curso: f.curso,
     uc: f.uc,
+    contentType: file ? file.contentType : null, //vem do uploads.files
     tipo: f.tipo,
+    rating: f.rating,
     rating: f.rating,
     ratingCount: f.ratingCount,
     author: f.ownerEmail,
@@ -109,7 +114,7 @@ router.get('/', autenticar(), async (req, res) => {
     page: Number(page),
     totalPages: Math.ceil(total / limit),
     totalFiles: total,
-    files: files.map(formatFile)
+    files: await Promise.all(files.map(formatFile))
   });
 });
 

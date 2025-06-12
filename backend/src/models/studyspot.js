@@ -11,7 +11,7 @@ const studySpotSchema = new mongoose.Schema({
   morada: { type: String, required: true,trim:true,default: '' }, 
   codigoPostal: {
     type: String,
-    required: true, trim: true,
+    required: false, trim: true,
     match: [/^\d{4}-\d{3}$/, 'O código postal deve ter o formato NNNN-NNN'],default: ''
   },
   criadoPor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

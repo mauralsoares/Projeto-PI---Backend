@@ -1,0 +1,60 @@
+Projeto-PI---Backend/
+│
+├── backend/                        # Código-fonte do backend (API Node.js/Express)
+│   ├── node_modules/               # Dependências Node.js (geridas automaticamente)
+│   ├── src/
+│   │   ├── config/                 # Configuração da base de dados e GridFS
+│   │   │   ├── db.js                   # Ligação à base de dados MongoDB
+│   │   │   └── gridfs.js               # Configuração do GridFS para ficheiros
+│   │   ├── controllers/            # Lógica dos controladores das rotas
+│   │   │   ├── authControllers.js      # Controladores de autenticação (registo, login, perfil)
+│   │   │   ├── ratingController.js     # Controladores de classificação de ficheiros
+│   │   │   ├── studySpotController.js  # Controladores de locais de estudo
+│   │   │   └── userController.js       # Controladores de utilizadores
+│   │   ├── middleware/              # Middlewares de autenticação, validação, etc.
+│   │   ├── models/                 # Modelos de dados (Mongoose schemas)
+│   │   │   ├── lists/                  # Listas auxiliares (cursos, UCs, tipos de ficheiro)
+│   │   │   │   ├── cursos.js
+│   │   │   │   ├── fileTypes.js
+│   │   │   │   └── ucs.js
+│   │   │   ├── fileMeta.js             # Modelo de metadados de ficheiros
+│   │   │   ├── studyspot.js            # Modelo de locais de estudo
+│   │   │   └── User.js                 # Modelo de utilizador
+│   │   ├── routes/                 # Definição das rotas da API
+│   │   │   ├── authRoutes.js           # Rotas de autenticação
+│   │   │   ├── fileRateRoute.js        # Rotas de classificação de ficheiros
+│   │   │   ├── fileRoutes.js           # Rotas de upload, download e pesquisa de ficheiros
+│   │   │   ├── fileSearchRoutes.js     # Rotas de pesquisa avançada de ficheiros
+│   │   │   ├── listRoutes.js           # Rotas para listas auxiliares (cursos, UCs, tipos de ficheiro)
+│   │   │   ├── rateRoute.js            # Rotas alternativas de rating (se existirem)
+│   │   │   ├── studySpotRoutes.js      # Rotas de locais de estudo
+│   │   │   └── userRoutes.js           # Rotas de gestão de utilizadores
+│   │   └── app.js                  # Ficheiro principal da aplicação Express
+│   ├── .env                        # Variáveis de ambiente (não versionado)
+│   ├── Dockerfile                  # Dockerfile do backend
+│   ├── package.json                # Dependências e scripts do backend
+│   ├── package-lock.json           # Lockfile das dependências
+│   └── mongo-init.js               # Script de inicialização da base de dados MongoDB (se necessário)
+│
+├── documentação_api_DSN/           # Pasta de documentação técnica e de API
+│   ├── Documentação_API.txt            # Documentação detalhada da API
+│   ├── esturuta_pastas.txt             # Estrutura de pastas do projecto (este ficheiro)
+│   └── ...                             # Outros ficheiros de documentação
+│
+├── .env                              # Variáveis de ambiente do projecto (não versionado)
+├── .gitattributes                    # Configuração de atributos Git
+├── .gitignore                        # Ficheiros e pastas a ignorar pelo Git
+├── docker-compose.yml                # Orquestração dos serviços (backend, MongoDB, etc.)
+├── README.md                         # Documentação principal do projecto
+
+
+Legenda das pastas principais:
+controllers/: Implementação da lógica de negócio de cada rota.
+models/: Definição dos esquemas de dados (MongoDB/Mongoose).
+routes/: Organização das rotas da API por domínio funcional.
+middlewares/: Funções intermédias para autenticação, validação, etc.
+utils/: Funções auxiliares e utilitárias.
+cert/: Certificados SSL para HTTPS em ambiente de desenvolvimento.
+frontend/: Código da interface de utilizador.
+docker-compose.yml: Ficheiro de orquestração dos serviços em containers.
+README.md: Guia de utilização, instalação e documentação técnica.

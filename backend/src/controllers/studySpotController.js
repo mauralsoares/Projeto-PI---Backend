@@ -40,6 +40,16 @@ exports.create = async (req, res) => {
     });
     res.status(201).json(spot);
   } catch (err) {
+    if (err.name === 'ValidationError') {
+      const detalhes = Object.values(err.errors).map(e => ({
+        campo: e.path,
+        mensagem: e.message
+      }));
+      return res.status(400).json({
+        erro: 'Erro de validação ao criar local',
+        detalhes
+      });
+    }
     res.status(400).json({ erro: 'Erro ao criar local', detalhe: err.message });
   }
 };

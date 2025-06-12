@@ -93,7 +93,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀 Servidor activo na porta ${PORT}`);
       console.log(`\nRealizado por:\n`);
-      console.log(`- Ana Maria | asian3@iscte-iul.pt | GitHub: @straistariam \n- Maura Soares|  mldass@iscte-iul.pt | GitHub: @mauralsoares  \n- Tomás Manarte| tmcme@iscte-iul.pt | GitHub: @Tomas-Manarte`);
+      console.log(`- Ana Maria | asian3@iscte-iul.pt | GitHub: @straistariam \n- Maura Soares|  mldass@iscte-iul.pt | GitHub: @mauralsoares  \n- Tomás Manarte| tmcme@iscte-iul.pt | GitHub: @Tomas-Manarte\n\n`);
     
     });
 

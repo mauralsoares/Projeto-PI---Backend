@@ -20,6 +20,9 @@ const connectDB = async () => {
       : process.env.MONGODB_URI_LOCAL;
 
   try {
+    // Nomes dos alunos que realizaram o projecto:
+    console.log(`\nRealizado por:\n`);
+    console.log(`- Ana Maria | asian3@iscte-iul.pt | GitHub: @straistariam \n- Maura Soares|  mldass@iscte-iul.pt | GitHub: @mauralsoares  \n- Tomás Manarte| tmcme@iscte-iul.pt | GitHub: @Tomas-Manarte\n\n`);
     // dInfo tipo de ligação escolhida
     console.log(` A ligar ao MongoDB (${process.env.USE_DOCKER === 'true' ? 'Docker' : 'Cloud'})`);
 

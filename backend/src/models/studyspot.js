@@ -12,7 +12,7 @@ const studySpotSchema = new mongoose.Schema({
   codigoPostal: {
     type: String,
     required: false, trim: true,
-    match: [/^\d{4}-\d{3}$/, 'O código postal deve ter o formato NNNN-NNN'],default: ''
+    match: [/^\d{4}-\d{3}$/, 'O código postal deve ter o formato NNNN-NNN'],default: '0000-000'
   },
   criadoPor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   criadoEm: { type: Date, default: Date.now }

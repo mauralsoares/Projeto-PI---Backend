@@ -1,3 +1,17 @@
+# Ver pasta Documentação_api_DSN:
+- Estrutura da base de dados em pdf
+- Documentação Postman em pdf
+- Link Para documentação Postman publicada online (Documentação_API.txt)
+- estrutura actual de pastas do projecto em txt
+
+Realizado por:
+
+Ana-Maria Straistari | asian3@iscte-iul.pt | @straistariam | Developer
+Maura Lopes deAlmeida Soares |  mldass@iscte-iul.pt | @mauralsoares | ProductOwner
+Tomáss Miguel Cunha Manarte | tmcme@iscte-iul.pt @Tomas-Manarte | ScrumMaster
+
+
+
 # Final Project
 ## Programação para Web e Desenvolvimento de Software para a Nuvem
 

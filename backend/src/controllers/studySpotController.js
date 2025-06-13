@@ -102,3 +102,26 @@ exports.getMine = async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar seus locais', detalhe: err.message });
   }
 };
+
+exports.search = async (req, res) => {
+  const { termo } = req.query;
+
+  if (!termo) {
+    return res.status(400).json({ erro: 'Parâmetro de pesquisa "termo" é obrigatório.' });
+  }
+
+  try {
+    const resultado = await StudySpot.find({
+      $or: [
+        { nome: { $regex: termo, $options: 'i' } },
+        { morada: { $regex: termo, $options: 'i' } },
+        { cidade: { $regex: termo, $options: 'i' } },
+      ]
+    });
+
+    res.json(resultado);
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro ao procurar locais', detalhe: err.message });
+  }
+};
+

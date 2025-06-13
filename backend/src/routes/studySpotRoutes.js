@@ -3,6 +3,9 @@ const router = express.Router();
 const studySpotController = require('../controllers/studySpotController');
 const autenticar = require('../middleware/authMiddleware');
 
+// pesquisar
+router.get('/pesquisar', studySpotController.search);
+
 // Criar novo local de estudo
 router.post('/', autenticar(), studySpotController.create);
 

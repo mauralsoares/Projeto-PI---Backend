@@ -8,7 +8,6 @@ exports.create = async (req, res) => {
     const { nome, descricao, longitude, latitude, cidade, morada, codigoPostal, forcar } = req.body;
     const threshold = 30; // metros
 
-    // 1. Verificar se já existe local próximo
     const locaisProximos = await StudySpot.find({
       localizacao: {
         $near: {
@@ -18,7 +17,6 @@ exports.create = async (req, res) => {
       }
     });
 
-    // 2. Se existir local próximo e não for pedido para forçar, pergunta ao user
     if (locaisProximos.length > 0 && !forcar) {
       return res.status(409).json({
         erro: 'Já existe um local de estudo muito próximo!',
@@ -28,7 +26,6 @@ exports.create = async (req, res) => {
       });
     }
 
-    // 3. Se não existir local próximo ou forçar está ativo, cria o local
     const spot = await StudySpot.create({
       nome,
       descricao,
@@ -36,8 +33,9 @@ exports.create = async (req, res) => {
       cidade,
       morada,
       codigoPostal,
-      criadoPor: req.user.id
+      criadoPor: req.user.id // <-- IMPORTANTE
     });
+
     res.status(201).json(spot);
   } catch (err) {
     if (err.name === 'ValidationError') {
@@ -71,7 +69,7 @@ exports.getByRaio = async (req, res) => {
       localizacao: {
         $near: {
           $geometry: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
-          $maxDistance: parseInt(raio) // raio em metros
+          $maxDistance: parseInt(raio)
         }
       }
     });
@@ -94,3 +92,13 @@ exports.delete = async (req, res) => {
   }
 };
 
+// ✅ NOVA FUNÇÃO: Listar locais do usuário autenticado
+exports.getMine = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const locais = await StudySpot.find({ criadoPor: userId });
+    res.json(locais);
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro ao buscar seus locais', detalhe: err.message });
+  }
+};

@@ -6,6 +6,9 @@ const autenticar = require('../middleware/authMiddleware');
 // Criar novo local de estudo
 router.post('/', autenticar(), studySpotController.create);
 
+// Listar locais do próprio usuário
+router.get('/meuslocais', autenticar(), studySpotController.getMine);
+
 // Listar todos os locais de estudo
 router.get('/', studySpotController.listAll);
 
